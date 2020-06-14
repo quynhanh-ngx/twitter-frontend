@@ -2,37 +2,20 @@ import React from 'react'
 import { Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
 const MySidebar = () => (
-    <Sidebar.Pushable as={Segment}>
-        <Sidebar
-            as={Menu}
-            animation='overlay'
-            icon='labeled'
-            inverted
-            vertical
-            visible
-            width='thin'
-        >
-            <Menu.Item as='a'>
-                <Icon name='home' />
-                Home
-            </Menu.Item>
-            <Menu.Item as='a'>
-                <Icon name='gamepad' />
-                Games
-            </Menu.Item>
-            <Menu.Item as='a'>
-                <Icon name='camera' />
-                Channels
-            </Menu.Item>
-        </Sidebar>
-
-        <Sidebar.Pusher>
-            <Segment basic>
-                <Header as='h3'>Application Content</Header>
-                <Image src='/images/wireframe/paragraph.png' />
-            </Segment>
-        </Sidebar.Pusher>
-    </Sidebar.Pushable>
+    <div className="ui vertical menu fluid">
+        <a className="item">
+            <h4 className="ui header">Promotions</h4>
+            <p>Check out our new promotions</p>
+        </a>
+        <a className="item">
+            <h4 className="ui header">Coupons</h4>
+            <p>Check out our collection of coupons</p>
+        </a>
+        <a className="item">
+            <h4 className="ui header">Rebates</h4>
+            <p>Visit our rebate forum for information on claiming rebates</p>
+        </a>
+    </div>
 )
 
 export default MySidebar

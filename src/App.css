@@ -11,41 +11,13 @@
   color: white;
 }
 
-/*html, body, .grid-container { height: 100%; margin: 0; }*/
-
-/*.grid-container {*/
-/*  display: grid;*/
-/*  grid-template-columns: 0.4fr 1.6fr 1fr;*/
-/*  grid-template-rows: 0.2fr 1.8fr 0.2fr 1.8fr;*/
-/*  gap: 1px 1px;*/
-/*  grid-template-areas: "logo . greeting" "sidebar tweetbox news" "sidebar submit-area news" "sidebar messages news";*/
-/*}*/
-
-/*.logo { grid-area: logo; }*/
-
-/*.tweetbox { grid-area: tweetbox; }*/
-
-/*.news { grid-area: news; }*/
-
-/*.search { grid-area: greeting; }*/
-
-/*.messages { grid-area: messages; }*/
-
-/*.sidebar { grid-area: sidebar; }*/
-
-/*.submit-area {*/
-/*  display: grid;*/
-/*  grid-template-columns: 1fr 1fr 1fr;*/
-/*  grid-template-rows: 1.2fr 0.8fr;*/
-/*  gap: 1px 1px;*/
-/*  grid-template-areas: ". . submit-box" ". . submit-box";*/
-/*  grid-area: submit-area;*/
-/*}*/
-
-/*.submit-box { grid-area: none; }*/
+.no-margin{
+  margin: 0 !important;
+}
 
 
-
-
+.MySearch > .input {
+  display: inline;
+}
 
 

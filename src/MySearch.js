@@ -37,9 +37,8 @@ export default class MySearch extends Component {
         const { isLoading, value, results } = this.state
 
         return (
-            <Grid>
-                <Grid.Column width={6}>
                     <Search
+                        fluid
                         loading={isLoading}
                         onResultSelect={this.handleResultSelect}
                         onSearchChange={_.debounce(this.handleSearchChange, 500, {
@@ -48,21 +47,8 @@ export default class MySearch extends Component {
                         results={results}
                         value={value}
                         {...this.props}
+                        className="MySearch"
                     />
-                </Grid.Column>
-            {/*    <Grid.Column width={10}>*/}
-            {/*        <Segment>*/}
-            {/*            <Header>State</Header>*/}
-            {/*            <pre style={{ overflowX: 'auto' }}>*/}
-            {/*  {JSON.stringify(this.state, null, 2)}*/}
-            {/*</pre>*/}
-            {/*            <Header>Options</Header>*/}
-            {/*            <pre style={{ overflowX: 'auto' }}>*/}
-            {/*  {JSON.stringify(source, null, 2)}*/}
-            {/*</pre>*/}
-            {/*        </Segment>*/}
-            {/*    </Grid.Column>*/}
-            </Grid>
         )
     }
 }
