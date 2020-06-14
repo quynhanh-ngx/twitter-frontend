@@ -9,30 +9,31 @@ import MyFeed from "./MyFeed";
 import MyTweetbox from "./MyTweetbox";
 
 function App() {
-  return (
-    <div className="App">
-      <div className="grid-container">
-        <div className="logo">
-            <Header as='h1' color = 'blue'>Twiiter</Header>
+    return (
+        <div className="App">
+            <div className="ui stackable three column grid">
+                <div className="row">
+                    <div className="four wide column"><Header as='h1' color='blue'>Twiiter</Header></div>
+                    <div className="eight wide column">Home</div>
+                    <div className="four wide column"><MySearch/></div>
+                </div>
+                <div className="row">
+                    <div className="four wide column"><MySidebar/></div>
+                    <div className="eight wide column">
+                        <div className="row"><MyTweetbox/></div>
+                        <div className="row">
+                            <Button inverted color='blue'>
+                                Submit
+                            </Button>
+                        </div>
+                        <div className="row"><MyFeed/></div>
+                    </div>
+                    <div className="four wide column">News</div>
+                </div>
+            </div>
+
         </div>
-        <div className="tweetbox">
-          <MyTweetbox/>
-        </div>
-        <div className="news">Yoooooo</div>
-        <div className="search"><MySearch/></div>
-        <div className="messages"><MyFeed/></div>
-    <div className="sidebar"><MySidebar/>
-        </div>
-        <div className="submit-area">
-          <div className="submit-box">
-              <Button inverted color='blue'>
-                  Submit
-              </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default App;
