@@ -3,7 +3,7 @@ import { Form, TextArea } from 'semantic-ui-react'
 
 const MyTweetbox = () => (
     <Form>
-        <TextArea placeholder='Whassup?' />
+        <TextArea placeholder='Whassup?'  />
     </Form>
 )
 

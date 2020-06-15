@@ -7,19 +7,66 @@ const MySidebar = () => (
         <a className="item">
             <h4 className="ui header">
                 <div>
-                    <Icon loading name = 'home' size= 'big'/>
-                HOME!!!!
+                    <Icon name = 'home' size= 'large'/>
+                Home
                     </div>
                 </h4>
-            <p>Check out our new promotions</p>
         </a>
         <a className="item">
-            <h4 className="ui header">Coupons</h4>
-            <p>Check out our collection of coupons</p>
+            <h4 className="ui header">
+                <div>
+                    <Icon name = 'hashtag' size= 'large' />
+                    Explore
+                </div>
+            </h4>
         </a>
         <a className="item">
-            <h4 className="ui header">Rebates</h4>
-            <p>Visit our rebate forum for information on claiming rebates</p>
+            <h4 className="ui header">
+                <div>
+                    <Icon  name = 'bell outline' size= 'large' />
+                    Notifications
+                </div>
+            </h4>
+        </a>
+        <a className="item">
+            <h4 className="ui header">
+                <div>
+                    <Icon  name = 'mail outline' size= 'large' />
+                    Messages
+                </div>
+            </h4>
+        </a>
+        <a className="item">
+            <h4 className="ui header">
+                <div>
+                    <Icon name = 'bookmark outline' size= 'large' />
+                    Bookmarks
+                </div>
+            </h4>
+        </a>
+        <a className="item">
+            <h4 className="ui header">
+                <div>
+                    <Icon  name = 'list ul' size= 'large' />
+                    Lists
+                </div>
+            </h4>
+        </a>
+        <a className="item">
+            <h4 className="ui header">
+                <div>
+                    <Icon  name = 'user outline' size= 'large' />
+                    Profile
+                </div>
+            </h4>
+        </a>
+        <a className="item">
+            <h4 className="ui header">
+                <div>
+                    <Icon name = 'ellipsis horizontal' size= 'large' />
+                    More
+                </div>
+            </h4>
         </a>
     </div>
     </div>

@@ -9,8 +9,13 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
+.MySideBar {
+  text-align: left;
+  max-width: 15rem;
+  float: right;
+}
+
 
 .no-margin{
   margin: 0 !important;
@@ -21,10 +26,18 @@
   display: inline;
 }
 
+.ui.feed>.event{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 1px solid white;
+  border-left-style: none;
+  border-right-style: none;
+}
+
 .ui.feed>.event>.content .extra,
 .ui.feed>.event>.content .summary
 {
-  color: black;
+  color: aqua;
 }
 
 .ui.feed>.event>.content .summary>.date{
@@ -38,4 +51,40 @@ a {
 .ui.feed>.event>.content .meta a, .ui.feed>.event>.content .meta>.icon {
   color: lime;
 }
+
+.grid-title{
+  border: 1px solid nsvy;
+  /*border-bottom-style: none;*/
+}
+
+.grid-center{
+  border: 1px solid white;
+  border-top-style: none;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.grid-center-top{
+  padding-bottom:0 !important;
+}
+
+.grid-center-bottom{
+  padding-top: 0 !important;
+}
+
+.grid-submit-area{
+  border: 2px none white;
+  border-bottom-style: solid;
+}
+
+.grid-tweetbox-area > .ui.form > textarea{
+  border: 1px solid rgba(14,14,14,0);
+  resize: none;
+}
+
+.grid-logo{
+
+}
+
+
 
