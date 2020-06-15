@@ -6,7 +6,7 @@ import faker from "faker";
 const source = _.times(100, () => ({
     name: faker.name.firstName() + " " + faker.name.lastName(),
     date: faker.date.recent(3),
-    text: faker.company.catchPhrase(),
+    text: faker.lorem.text(),
     image: faker.internet.avatar(),
     likes: faker.random.number({ min: 0, max: 55 })
 }))

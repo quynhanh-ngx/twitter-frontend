@@ -1,7 +1,8 @@
 .App {
   text-align: center;
-  background-color: #000000;
-  background-image: linear-gradient(147deg, #000000 0%, #04619f 74%);
+  background-color: #03e5b7;
+  background-image: linear-gradient(315deg, #03e5b7 0%, #037ade 74%);
+  background-attachment: fixed;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -20,4 +21,21 @@
   display: inline;
 }
 
+.ui.feed>.event>.content .extra,
+.ui.feed>.event>.content .summary
+{
+  color: black;
+}
+
+.ui.feed>.event>.content .summary>.date{
+  color: gold;
+}
+
+a {
+  color: gold;
+}
+
+.ui.feed>.event>.content .meta a, .ui.feed>.event>.content .meta>.icon {
+  color: lime;
+}
 
