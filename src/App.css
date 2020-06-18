@@ -8,13 +8,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  /*font-size: calc(10px + 2vmin);*/
 }
 .MySideBar {
   text-align: left;
   max-width: 15rem;
   float: right;
 }
+
+
 
 
 .no-margin{
@@ -82,8 +84,29 @@ a {
   resize: none;
 }
 
-.grid-logo{
+/*Bootstrap*/
+/*.navbar{*/
+/*  width: 100%;*/
+/*  */
+/*}*/
 
+/*.navbar .navbar-nav {*/
+/*  display: inline-block;*/
+/*  float: none;*/
+/*  vertical-align: top;*/
+/*}*/
+
+/*.navbar .navbar-collapse {*/
+/*  text-align: center;*/
+/*}*/
+
+#tweetbox{
+  margin-top: 15px;
+  width:100%;
+}
+
+#tweetbox-submit{
+  float:right;
 }
 
 

@@ -15,6 +15,7 @@ const source = _.times(5, () => ({
 export default class MySearch extends Component {
     state = initialState
 
+
     handleResultSelect = (e, { result }) => this.setState({ value: result.title })
 
     handleSearchChange = (e, { value }) => {
