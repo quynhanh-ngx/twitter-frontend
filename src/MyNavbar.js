@@ -9,7 +9,8 @@ import {Bell, Envelope, Hash, HouseDoor, Moon, Person} from "react-bootstrap-ico
 let isLoggedIn = false;
 
 const MyNavbar = () => (
-<Navbar className="w-100" sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
+//    bg="dark" variant="dark"
+<Navbar className="w-100 navbar-background" sticky="top" collapseOnSelect expand="lg"  >
     <Navbar.Brand href="#home"><Moon/></Navbar.Brand>
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">

@@ -16,9 +16,6 @@
   float: right;
 }
 
-
-
-
 .no-margin{
   margin: 0 !important;
 }
@@ -39,7 +36,8 @@
 .ui.feed>.event>.content .extra,
 .ui.feed>.event>.content .summary
 {
-  color: aqua;
+  color: black;
+
 }
 
 .ui.feed>.event>.content .summary>.date{
@@ -54,10 +52,10 @@ a {
   color: lime;
 }
 
-.grid-title{
-  border: 1px solid nsvy;
-  /*border-bottom-style: none;*/
-}
+/*.grid-title{*/
+/*  border: 1px solid nsvy;*/
+/*  !*border-bottom-style: none;*!*/
+/*}*/
 
 .grid-center{
   border: 1px solid white;
@@ -103,11 +101,157 @@ a {
 #tweetbox{
   margin-top: 15px;
   width:100%;
+  z-index:1;
+  position: relative;
 }
 
 #tweetbox-submit{
   float:right;
 }
+
+
+.navbar-background{
+  background-color: #20bf55;
+  background-image: linear-gradient(315deg, #20bf55 0%, #01baef 74%);
+}
+
+.btn-outline-warning {
+  color: lime;
+  border-color: lime;
+  position: relative;
+  z-index: 1;
+}
+
+
+.clouds-container{
+  position: relative;
+  height:100vh;
+  padding-top: 50px;
+  overflow: hidden;
+}
+
+.cloud{
+  position: relative;
+  width: 150px;
+  height: 50px;
+  background: white;
+  border-radius: 100px;
+  border-bottom: 3px solid grey;
+  left: -20%;
+}
+
+
+.cloud::before{
+  content: '';
+  position: absolute;
+  width:50%;
+  height:150%;
+  left:13%;
+  top: -60%;
+  background:white;
+  background: -webkit-linear-gradient(#e6f0f2, white 30%);
+  background: -o-linear-gradient(#e6f0f2, white 30%);
+  background: linear-gradient(#e6f0f2, white 30%);
+  border-radius: 50%;
+}
+
+
+.cloud::after{
+  content: '';
+  position: absolute;
+  width:30%;
+  height:80%;
+  right:15%;
+  top: -25%;
+  background:white;
+  background: -webkit-linear-gradient(#e6f0f2, white 20%);
+  background: -o-linear-gradient(#e6f0f2, white 20%);
+  background: linear-gradient(#e6f0f2, white 20%);
+  border-radius: 50%;
+}
+
+
+.cloud .shadow {
+  width: 80%;
+  position: absolute;
+  bottom: -10%;
+  left:5%;
+  z-index: -1;
+  box-shadow: 0 0 20px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+.is-small{
+  width: 75px;
+  height: 25px;
+}
+.is-medium{
+  width: 150px;
+  height: 50px;
+}
+.is-large{
+  width: 240px;
+  height: 80px;
+}
+
+.slow{
+  -o-animation: float 45s infinite linear;
+  -moz-animation: float 45s infinite linear;
+  -webkit-animation: float 45s infinite linear;
+  animation: float 45s infinite linear;
+}
+.medium{
+  -o-animation: float 35s infinite linear;
+  -moz-animation: float 35s infinite linear;
+  -webkit-animation: float 35s infinite linear;
+  animation: float 35s infinite linear;
+}
+.fast{
+  -o-animation: float 25s infinite linear;
+  -moz-animation: float 25s infinite linear;
+  -webkit-animation: float 25s infinite linear;
+  animation: float 25s infinite linear;
+}
+
+.delay-1 {
+  animation-delay: 1s;
+}
+
+.delay-2 {
+  animation-delay: 2s;
+}
+
+.delay-3 {
+  animation-delay: 3s;
+}
+
+.delay-4 {
+  animation-delay: 4s;
+}
+
+.delay-5 {
+  animation-delay: 5s;
+}
+
+.delay-6 {
+  animation-delay: 6s;
+}
+
+@keyframes float{
+  0% { left:-20%; }
+  100% { left:110%; }
+}
+
+.feed{
+  position: relative;
+}
+
+.clouds{
+  max-width: 100vw;
+  height: 0;
+  z-index: 0;
+}
+
 
 
 
