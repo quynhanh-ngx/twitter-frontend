@@ -1,20 +1,13 @@
-import React, {createRef} from 'react';
-import logo from './logo.svg';
-import { Header, Icon, Ref, Sticky} from "semantic-ui-react";
+import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import MySidebar from "./MySidebar";
-import MySearch from "./MySearch";
 import MyFeed from "./MyFeed";
-import MyTweetbox from "./MyTweetbox";
-import MyNews from "./MyNews";
 import MyNavbar from "./MyNavbar";
-import MyListGroup from "./MyListGroup";
 import MyTextArea from "./MyTextArea";
-import Button from "react-bootstrap/Button";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
 
-let contextRef = createRef()
 
 function Cloud(props) {
     var speedClass;
@@ -51,8 +44,98 @@ function Cloud(props) {
     return <div className={'cloud ' + cloudClasses.join(" ").trimRight()} ><span className="shadow"></span></div>;
 }
 
+const API_ENDPOINT = 'http://localhost:8000/api';
+
 class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            displayed_form: '',
+            logged_in: localStorage.getItem('token') ? true : false,
+            username: ''
+        };
+    }
+
+    componentDidMount() {
+        if (this.state.logged_in) {
+            fetch(API_ENDPOINT + '/current-user/', {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`
+                }
+            })
+                .then(res => res.json())
+                .then(json => {
+                    this.setState({ username: json.username });
+                });
+        }
+    }
+
+    handle_login = (e, data) => {
+        e.preventDefault();
+        fetch(API_ENDPOINT + '/token-auth/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(json => {
+                localStorage.setItem('token', json.token);
+                this.setState({
+                    logged_in: true,
+                    displayed_form: '',
+                    username: json.user.username
+                });
+            });
+    };
+
+    handle_signup = (e, data) => {
+        e.preventDefault();
+        fetch(API_ENDPOINT + '/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(json => {
+                localStorage.setItem('token', json.token);
+                this.setState({
+                    logged_in: true,
+                    displayed_form: '',
+                    username: json.username
+                });
+            });
+    };
+
+    handle_logout = () => {
+        localStorage.removeItem('token');
+        this.setState({ logged_in: false, username: '' });
+    };
+
+    display_form = form => {
+        this.setState({
+            displayed_form: form
+        });
+    };
+
     render() {
+
+        let form;
+        switch (this.state.displayed_form) {
+            case 'login':
+                form = <LoginForm handle_login={this.handle_login} />;
+                break;
+            case 'signup':
+                form = <SignupForm handle_signup={this.handle_signup} />;
+                break;
+            default:
+                form = null;
+        }
+
         const cloudCount = 20;
         let clouds = [];
         for (let i = 0; i < cloudCount; i++) {
@@ -63,17 +146,20 @@ class App extends React.Component {
         }
         return (
             <div className="App">
-                <MyNavbar/>
+                <MyNavbar
+                    logged_in={this.state.logged_in}
+                    display_form={this.display_form}
+                    handle_logout={this.handle_logout}
+                />
                 <div className="container">
+                    {this.state.logged_in
+                        ? `Hello, ${this.state.username}`
+                        : 'Please Log In'}
+                    {form}
                     <div id="feed-wrapper">
-                        <MyTextArea/>
+                        {this.state.logged_in ? <MyTextArea/> : null}
                         <div className="sticky-top clouds">
                             { clouds }
-                            {/*<div className='cloud is-large slow'><span className="shadow"></span></div>*/}
-                            {/*<div className='cloud is-medium medium delay'><span className="shadow"></span></div>*/}
-                            {/*<div className='cloud is-large slow delay'><span className="shadow"></span></div>*/}
-                            {/*<div className='cloud is-medium medium'><span className="shadow"></span></div>*/}
-                            {/*<div className='cloud is-small fast'><span className="shadow"></span></div>*/}
                         </div>
                         <MyFeed/>
                     </div>
