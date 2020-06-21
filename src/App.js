@@ -7,6 +7,7 @@ import MyNavbar from "./MyNavbar";
 import MyTextArea from "./MyTextArea";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
+import axios from "axios";
 
 
 function Cloud(props) {
@@ -52,12 +53,14 @@ class App extends React.Component {
         super(props);
         this.state = {
             displayed_form: '',
-            logged_in: localStorage.getItem('token') ? true : false,
-            username: ''
+            logged_in: !!localStorage.getItem('token'),
+            username: '',
+            tweets: []
         };
     }
 
     componentDidMount() {
+        this.resetState();
         if (this.state.logged_in) {
             fetch(API_ENDPOINT + '/current-user/', {
                 headers: {
@@ -69,6 +72,17 @@ class App extends React.Component {
                     this.setState({ username: json.username });
                 });
         }
+    }
+
+    resetState = () =>{
+        this.getTweets();
+    };
+
+    getTweets = () => {
+        axios.get(API_ENDPOINT + '/tweet', {headers : {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+            }}).then(res => this.setState({tweets : res.data}));
+       
     }
 
     handle_login = (e, data) => {
@@ -161,7 +175,9 @@ class App extends React.Component {
                         <div className="sticky-top clouds">
                             { clouds }
                         </div>
-                        <MyFeed/>
+                        <MyFeed
+                            tweets= {this.state.tweets}
+                        />
                     </div>
                     {/*<MyListGroup/>*/}
                 </div>
