@@ -15,7 +15,7 @@ function Cloud(props) {
     var sizeClass;
     var delayClass;
 
-    switch(props.speed){
+    switch (props.speed) {
         case 2:
             speedClass = "fast";
             break;
@@ -42,11 +42,13 @@ function Cloud(props) {
     delayClass = "delay-" + Math.min(props.delay, 6);
     let cloudClasses = [speedClass, sizeClass, delayClass];
 
-    return <div className={'cloud ' + cloudClasses.join(" ").trimRight()} ><span className="shadow"></span></div>;
+    return <div className={'cloud ' + cloudClasses.join(" ").trimRight()}><span className="shadow"></span></div>;
 }
 
 const API_ENDPOINT = 'http://localhost:8000/api';
 
+
+// TODO: implement refresh tokens
 class App extends React.Component {
 
     constructor(props) {
@@ -61,6 +63,9 @@ class App extends React.Component {
 
     componentDidMount() {
         this.resetState();
+    }
+
+    resetState = () => {
         if (this.state.logged_in) {
             fetch(API_ENDPOINT + '/current-user/', {
                 headers: {
@@ -69,20 +74,19 @@ class App extends React.Component {
             })
                 .then(res => res.json())
                 .then(json => {
-                    this.setState({ username: json.username });
+                    this.setState({username: json.username});
                 });
+            this.getTweets();
         }
-    }
-
-    resetState = () =>{
-        this.getTweets();
     };
 
     getTweets = () => {
-        axios.get(API_ENDPOINT + '/tweet', {headers : {
+        axios.get(API_ENDPOINT + '/tweet', {
+            headers: {
                 Authorization: `JWT ${localStorage.getItem('token')}`
-            }}).then(res => this.setState({tweets : res.data}));
-       
+            }
+        }).then(res => this.setState({tweets: res.data}));
+
     }
 
     handle_login = (e, data) => {
@@ -103,6 +107,7 @@ class App extends React.Component {
                     username: json.user.username
                 });
             });
+        this.resetState();
     };
 
     handle_signup = (e, data) => {
@@ -127,8 +132,17 @@ class App extends React.Component {
 
     handle_logout = () => {
         localStorage.removeItem('token');
-        this.setState({ logged_in: false, username: '' });
+        this.setState({logged_in: false, username: ''});
     };
+
+    handle_like = (tweetId) => {
+        axios.post(API_ENDPOINT + '/like/', {tweet : tweetId},
+        {
+            headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+            }
+        })
+    }
 
     display_form = form => {
         this.setState({
@@ -141,10 +155,10 @@ class App extends React.Component {
         let form;
         switch (this.state.displayed_form) {
             case 'login':
-                form = <LoginForm handle_login={this.handle_login} />;
+                form = <LoginForm handle_login={this.handle_login}/>;
                 break;
             case 'signup':
-                form = <SignupForm handle_signup={this.handle_signup} />;
+                form = <SignupForm handle_signup={this.handle_signup}/>;
                 break;
             default:
                 form = null;
@@ -171,13 +185,13 @@ class App extends React.Component {
                         : 'Please Log In'}
                     {form}
                     <div id="feed-wrapper">
-                        {this.state.logged_in ? <MyTextArea/> : null}
-                        <div className="sticky-top clouds">
-                            { clouds }
-                        </div>
-                        <MyFeed
-                            tweets= {this.state.tweets}
-                        />
+                        {this.state.logged_in ?
+                            [
+                                <MyTextArea/>,
+                                <div className="sticky-top clouds">{clouds}</div>,
+                                <MyFeed tweets={this.state.tweets} handle_like = {this.handle_like}/>
+                            ] : null}
+
                     </div>
                     {/*<MyListGroup/>*/}
                 </div>

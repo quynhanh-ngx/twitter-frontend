@@ -17,10 +17,9 @@ export default class MyFeed extends Component {
 
     render() {
         const items = [];
-        console.log(this.props.tweets)
 
         this.props.tweets.forEach(value => {
-            items.push(<Feed.Event>
+            items.push(<Feed.Event id={'tweet-' + value.id}>
                 <Feed.Label image={value.author_picture}/>
                 <Feed.Content>
                     <Feed.Summary>
@@ -31,8 +30,8 @@ export default class MyFeed extends Component {
                         {value.message}
                     </Feed.Extra>
                     <Feed.Meta>
-                        <Feed.Like>
-                            <Icon name='like'/>{value.like_count} Likes
+                        <Feed.Like onClick={(e) => this.props.handle_like(value.id)}>
+                            <Icon name='like'/>{value.like_count} {value.like_count === 1 ? 'Like' : 'Likes'}
                         </Feed.Like>
                     </Feed.Meta>
                 </Feed.Content>
