@@ -66,7 +66,9 @@ class App extends React.Component {
     }
 
     resetState = () => {
+        console.log('Checking if user is logged in');
         if (this.state.logged_in) {
+            console.log('They are, fetching user name');
             fetch(API_ENDPOINT + '/current-user/', {
                 headers: {
                     Authorization: `JWT ${localStorage.getItem('token')}`
@@ -76,11 +78,16 @@ class App extends React.Component {
                 .then(json => {
                     this.setState({username: json.username});
                 });
+            console.log('Calling get tweets function');
             this.getTweets();
+        }
+        else{
+            console.log("They aren't logged in");
         }
     };
 
     getTweets = () => {
+        console.log('Fetching tweets');
         axios.get(API_ENDPOINT + '/tweet', {
             headers: {
                 Authorization: `JWT ${localStorage.getItem('token')}`
@@ -90,6 +97,7 @@ class App extends React.Component {
     }
 
     handle_login = (e, data) => {
+        console.log('Logging in');
         e.preventDefault();
         fetch(API_ENDPOINT + '/token-auth/', {
             method: 'POST',
@@ -106,8 +114,8 @@ class App extends React.Component {
                     displayed_form: '',
                     username: json.user.username
                 });
-            });
-        this.resetState();
+            })
+            .then(() => this.resetState());
     };
 
     handle_signup = (e, data) => {
