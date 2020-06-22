@@ -257,3 +257,8 @@ a {
   min-height: 1600px;
 }
 
+.liked{
+  color: red !important;
+}
+
+

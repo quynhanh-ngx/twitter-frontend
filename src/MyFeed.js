@@ -30,7 +30,7 @@ export default class MyFeed extends Component {
                         {value.message}
                     </Feed.Extra>
                     <Feed.Meta>
-                        <Feed.Like onClick={(e) => this.props.handle_like(value.id)}>
+                        <Feed.Like className={value.liked ? 'liked' : 'like'} onClick={() => value.liked ? this.props.handle_dislike(value.id) : this.props.handle_like(value.id)}>
                             <Icon name='like'/>{value.like_count} {value.like_count === 1 ? 'Like' : 'Likes'}
                         </Feed.Like>
                     </Feed.Meta>
@@ -47,5 +47,7 @@ export default class MyFeed extends Component {
 }
 
 MyFeed.propTypes = {
-    tweets: PropTypes.array
+    tweets: PropTypes.array,
+    handle_like: PropTypes.func,
+    handle_dislike: PropTypes.func
 };

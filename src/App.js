@@ -142,6 +142,45 @@ class App extends React.Component {
                 Authorization: `JWT ${localStorage.getItem('token')}`
             }
         })
+        let likedTweetIndex = -1;
+        // Search for Tweet being liked
+        for (let i = 0; i < this.state.tweets.length; i++) {
+            let tweet = this.state.tweets[i];
+            if(tweetId===tweet.id){
+                likedTweetIndex = i;
+                break;
+            }
+        }
+        // If found, set liked status to true
+        if (likedTweetIndex !== -1){
+            this.state.tweets[likedTweetIndex].liked = true;
+            this.state.tweets[likedTweetIndex].like_count++;
+            this.setState({tweets: this.state.tweets});
+        }
+    }
+
+    handle_dislike = (tweetId) => {
+        axios.delete(API_ENDPOINT + '/like/' + tweetId + '/',
+            {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`
+                }
+            })
+        let likedTweetIndex = -1;
+        // Search for Tweet being liked
+        for (let i = 0; i < this.state.tweets.length; i++) {
+            let tweet = this.state.tweets[i];
+            if(tweetId===tweet.id){
+                likedTweetIndex = i;
+                break;
+            }
+        }
+        // If found, set liked status to true
+        if (likedTweetIndex !== -1){
+            this.state.tweets[likedTweetIndex].liked = false;
+            this.state.tweets[likedTweetIndex].like_count--;
+            this.setState({tweets: this.state.tweets});
+        }
     }
 
     display_form = form => {
@@ -189,7 +228,7 @@ class App extends React.Component {
                             [
                                 <MyTextArea/>,
                                 <div className="sticky-top clouds">{clouds}</div>,
-                                <MyFeed tweets={this.state.tweets} handle_like = {this.handle_like}/>
+                                <MyFeed tweets={this.state.tweets} handle_like = {this.handle_like} handle_dislike = {this.handle_dislike}/>
                             ] : null}
 
                     </div>
