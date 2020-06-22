@@ -262,3 +262,10 @@ a {
 }
 
 
+.meta{
+  display: inline-flex !important;
+}
+
+.ui.feed>.event>.content .meta .delete {
+  transition: .2s color ease;
+}

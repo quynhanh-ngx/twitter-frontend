@@ -30,9 +30,12 @@ export default class MyFeed extends Component {
                         {value.message}
                     </Feed.Extra>
                     <Feed.Meta>
-                        <Feed.Like className={value.liked ? 'liked' : 'like'} onClick={() => value.liked ? this.props.handle_dislike(value.id) : this.props.handle_like(value.id)}>
+                        <Feed.Like className={value.liked ? 'liked' : ''} onClick={() => value.liked ? this.props.handle_dislike(value.id) : this.props.handle_like(value.id)}>
                             <Icon name='like'/>{value.like_count} {value.like_count === 1 ? 'Like' : 'Likes'}
                         </Feed.Like>
+                        {this.props.current_user === value.author ? <a className="delete" onClick={() =>this.props.handle_delete(value.id)}>
+                            <i aria-hidden="true" className="delete icon"></i>Delete
+                        </a> : null}
                     </Feed.Meta>
                 </Feed.Content>
             </Feed.Event>)

@@ -191,6 +191,27 @@ class App extends React.Component {
         }
     }
 
+    // Allow author to post tweets
+    handle_tweet = (data) => {
+        axios.post(API_ENDPOINT + '/tweet/', {message: data},
+            {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`
+                }
+            })
+            .then(() => this.resetState())
+    }
+
+
+    handle_delete = (tweetId) => {
+        axios.delete(API_ENDPOINT + '/tweet/' + tweetId + '/',
+            {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`
+                }
+            }).then(() => this.resetState())
+    }
+
     display_form = form => {
         this.setState({
             displayed_form: form
@@ -234,9 +255,15 @@ class App extends React.Component {
                     <div id="feed-wrapper">
                         {this.state.logged_in ?
                             [
-                                <MyTextArea/>,
+                                <MyTextArea handle_tweet={this.handle_tweet}/>,
                                 <div className="sticky-top clouds">{clouds}</div>,
-                                <MyFeed tweets={this.state.tweets} handle_like = {this.handle_like} handle_dislike = {this.handle_dislike}/>
+                                <MyFeed
+                                    tweets={this.state.tweets}
+                                    handle_like = {this.handle_like}
+                                    handle_dislike = {this.handle_dislike}
+                                    handle_delete = {this.handle_delete}
+                                    current_user = {this.state.username}
+                                />
                             ] : null}
 
                     </div>
