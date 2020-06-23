@@ -4,6 +4,8 @@ import { Feed, Icon } from 'semantic-ui-react'
 import faker from "faker";
 import PropTypes from "prop-types";
 import SignupForm from "./SignupForm";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 // const source = _.times(100, () => ({
 //     name: faker.name.firstName() + " " + faker.name.lastName(),
@@ -19,6 +21,28 @@ export default class MyFeed extends Component {
         const items = [];
 
         this.props.tweets.forEach(value => {
+            const alertOptions = {
+                title: 'Delete tweet',
+                message: 'Y\'all sure about that?',
+                buttons: [
+                    {
+                        label: 'Yassss',
+                        onClick: () => this.props.handle_delete(value.id)
+                    },
+                    {
+                        label: 'Nahhh',
+                        onClick: () => {}
+                    }
+                ],
+                childrenElement: () => <div />,
+                // customUI: ({ onClose }) => <div>Custom UI</div>,
+                closeOnEscape: true,
+                closeOnClickOutside: true,
+                // willUnmount: () => {},
+                // afterClose: () => {},
+                // onClickOutside: () => {},
+                // onKeypressEscape: () => {}
+            };
             items.push(<Feed.Event id={'tweet-' + value.id}>
                 <Feed.Label image={value.author_picture}/>
                 <Feed.Content>
@@ -33,7 +57,7 @@ export default class MyFeed extends Component {
                         <Feed.Like className={value.liked ? 'liked' : ''} onClick={() => value.liked ? this.props.handle_dislike(value.id) : this.props.handle_like(value.id)}>
                             <Icon name='like'/>{value.like_count} {value.like_count === 1 ? 'Like' : 'Likes'}
                         </Feed.Like>
-                        {this.props.current_user === value.author ? <a className="delete" onClick={() =>this.props.handle_delete(value.id)}>
+                        {this.props.current_user === value.author ? <a className="delete" onClick={() => confirmAlert(alertOptions)}>
                             <i aria-hidden="true" className="delete icon"></i>Delete
                         </a> : null}
                     </Feed.Meta>
