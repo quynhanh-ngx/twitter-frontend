@@ -9,7 +9,7 @@ import {Bell, Envelope, Hash, HouseDoor, Moon, Person} from "react-bootstrap-ico
 
 function MyNavbar(props) {
     return <Navbar className="w-100 navbar-background" sticky="top" collapseOnSelect expand="lg"  >
-        <Navbar.Brand href="#home"><Moon/></Navbar.Brand>
+        <Navbar.Brand href="#home"><div className="🚀">🚀</div></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav fill justify className="mr-auto">

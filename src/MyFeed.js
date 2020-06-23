@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import SignupForm from "./SignupForm";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Image from "react-bootstrap/Image";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // const source = _.times(100, () => ({
 //     name: faker.name.firstName() + " " + faker.name.lastName(),
@@ -44,7 +46,7 @@ export default class MyFeed extends Component {
                 // onKeypressEscape: () => {}
             };
             items.push(<Feed.Event id={'tweet-' + value.id}>
-                <Feed.Label image={value.author_picture}/>
+                <Image src={value.author_picture} roundedCircle height='50px' width='50px' />
                 <Feed.Content>
                     <Feed.Summary>
                         <a>{ value.author_name }</a> posted on their page

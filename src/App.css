@@ -269,3 +269,7 @@ a {
 .ui.feed>.event>.content .meta .delete {
   transition: .2s color ease;
 }
+
+.🚀 {
+  font-size: 1.2em;
+}
