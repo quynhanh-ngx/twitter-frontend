@@ -57,8 +57,11 @@ class App extends React.Component {
             displayed_form: '',
             logged_in: !!localStorage.getItem('token'),
             username: '',
-            tweets: []
+            tweets: [],
+            pictures: [],
+            videos: [],
         };
+        this.onDrop = this.onDrop.bind(this);
     }
 
     componentDidMount() {
@@ -191,15 +194,58 @@ class App extends React.Component {
         }
     }
 
+    // Add files to state
+    handle_files = (files) => {
+        console.log(files);
+        const pictures = [];
+        const videos = [];
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            if (file.type.startsWith('image')){
+                pictures.push(file);
+            } else if(file.type.startsWith('video') ){
+                videos.push(file);
+            } else{
+                alert('Unsupported file type!!!!!!!!!!')
+            }
+        }
+        this.setState({pictures: pictures, videos: videos})
+    }
+
     // Allow author to post tweets
-    handle_tweet = (data) => {
-        axios.post(API_ENDPOINT + '/tweet/', {message: data},
-            {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`
-                }
-            })
+    handle_tweet = (message) => {
+        const video = this.state.videos.length === 0 ? null : this.state.videos[0];
+        const images = this.state.pictures;
+        var myHeaders = new Headers();
+        myHeaders.append("Connection", "keep-alive");
+        myHeaders.append("Accept-Language", "en-US,en;q=0.9");
+        myHeaders.append("Authorization", "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InF1YW5oIiwiZXhwIjoxNTkzNTM3NjQ1LCJlbWFpbCI6IiJ9.RzHjV30lsKB_a2EdqAvafWjqHklmYi5JYoY8O0WpRMs");
+
+
+        var formData = new FormData();
+        formData.append("message", message);
+        if (video != null) {
+            // console.log("video is not null")
+            formData.append("video", video);
+        }
+        for (let i = 0; i < images.length; i++) {
+            formData.append('image_' + i,  images[i]);
+        }
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow'
+        };
+
+        fetch(API_ENDPOINT + "/tweet/", requestOptions)
+            .then(response => response.text())
+            // TODO : Remove later
+            .then(result => console.log(result))
             .then(() => this.resetState())
+            .then(() => this.setState({videos: [], pictures: []}))
+            .catch(error => console.log('error', error));
     }
 
 
@@ -212,11 +258,26 @@ class App extends React.Component {
             }).then(() => this.resetState())
     }
 
+    handle_reply = (tweetId) => {
+        axios.get(API_ENDPOINT + '/tweet/',
+            {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`
+                }
+            }).then(() => this.resetState())
+    }
+
     display_form = form => {
         this.setState({
             displayed_form: form
         });
     };
+
+    onDrop(picture) {
+        this.setState({
+            pictures: this.state.pictures.concat(picture),
+        });
+    }
 
     render() {
 
@@ -255,7 +316,12 @@ class App extends React.Component {
                     <div id="feed-wrapper">
                         {this.state.logged_in ?
                             [
-                                <MyTextArea handle_tweet={this.handle_tweet}/>,
+                                <MyTextArea
+                                    handle_tweet={this.handle_tweet}
+                                    handle_files ={this.handle_files}
+                                    pictures = {this.state.pictures}
+                                    videos = {this.state.videos}
+                                />,
                                 <div className="sticky-top clouds">{clouds}</div>,
                                 <MyFeed
                                     tweets={this.state.tweets}
@@ -263,6 +329,7 @@ class App extends React.Component {
                                     handle_dislike = {this.handle_dislike}
                                     handle_delete = {this.handle_delete}
                                     current_user = {this.state.username}
+                                    handle_reply = {this.handle_reply}
                                 />
                             ] : null}
 

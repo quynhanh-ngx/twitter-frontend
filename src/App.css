@@ -273,3 +273,28 @@ a {
 .🚀 {
   font-size: 1.2em;
 }
+
+#bg-nested-dropdown{
+  color: lime;
+  border-color: lime;
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+}
+
+input[type="file"] {
+  display: none !important;
+}
+
+.file-upload{
+  color: lime;
+  border-color: lime;
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+}
+
+.tweet-image{
+  max-height: 254px;
+
+}

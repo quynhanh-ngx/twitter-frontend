@@ -1,13 +1,14 @@
 import _ from 'lodash'
 import React, {Component} from 'react'
-import { Feed, Icon } from 'semantic-ui-react'
+import {Feed, Icon} from 'semantic-ui-react'
 import faker from "faker";
 import PropTypes from "prop-types";
 import SignupForm from "./SignupForm";
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Image from "react-bootstrap/Image";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {ChatQuote, Reply} from "react-bootstrap-icons";
 
 // const source = _.times(100, () => ({
 //     name: faker.name.firstName() + " " + faker.name.lastName(),
@@ -23,6 +24,12 @@ export default class MyFeed extends Component {
         const items = [];
 
         this.props.tweets.forEach(value => {
+            const imageElements = [];
+            value.images.forEach(imageData =>{
+                imageElements.push(
+                    <img className="tweet-image" src={imageData.image} alt="Image"/>
+                )
+            });
             const alertOptions = {
                 title: 'Delete tweet',
                 message: 'Y\'all sure about that?',
@@ -33,10 +40,11 @@ export default class MyFeed extends Component {
                     },
                     {
                         label: 'Nahhh',
-                        onClick: () => {}
+                        onClick: () => {
+                        }
                     }
                 ],
-                childrenElement: () => <div />,
+                childrenElement: () => <div/>,
                 // customUI: ({ onClose }) => <div>Custom UI</div>,
                 closeOnEscape: true,
                 closeOnClickOutside: true,
@@ -46,22 +54,37 @@ export default class MyFeed extends Component {
                 // onKeypressEscape: () => {}
             };
             items.push(<Feed.Event id={'tweet-' + value.id}>
-                <Image src={value.author_picture} roundedCircle height='50px' width='50px' />
+                <Image src={value.author_picture} roundedCircle height='50px' width='50px'/>
                 <Feed.Content>
                     <Feed.Summary>
-                        <a>{ value.author_name }</a> posted on their page
+                        <a>{value.author_name}</a> posted on their page
                         <Feed.Date> {value.created_at}</Feed.Date>
                     </Feed.Summary>
                     <Feed.Extra text>
                         {value.message}
+                        <br/>
+                        {/*TODO: delete that br lol*/}
+                        {value.video ? <video width="auto" height="509" controls>
+                            <source src={value.video} type="video/mp4"/>
+                                    Your browser does not support the video tag.
+                        </video> : null}
+                        {imageElements ? <div className='tweet-images'>{imageElements}</div> : null}
                     </Feed.Extra>
                     <Feed.Meta>
-                        <Feed.Like className={value.liked ? 'liked' : ''} onClick={() => value.liked ? this.props.handle_dislike(value.id) : this.props.handle_like(value.id)}>
+                        <Feed.Like className={value.liked ? 'liked' : ''}
+                                   onClick={() => value.liked ? this.props.handle_dislike(value.id) : this.props.handle_like(value.id)}>
                             <Icon name='like'/>{value.like_count} {value.like_count === 1 ? 'Like' : 'Likes'}
                         </Feed.Like>
-                        {this.props.current_user === value.author ? <a className="delete" onClick={() => confirmAlert(alertOptions)}>
-                            <i aria-hidden="true" className="delete icon"></i>Delete
-                        </a> : null}
+                        {this.props.current_user === value.author ?
+                            <a className="delete" onClick={() => confirmAlert(alertOptions)}>
+                                <i aria-hidden="true" className="delete icon"></i>Delete
+                            </a> : null}
+                        <a className="comment" onClick={(this.props.handle_reply)}>
+                            <i aria-hidden="true" className="retweet icon"></i>Retweet
+                        </a>
+                        <a className="comment" onClick={(this.props.handle_reply)}>
+                            <ChatQuote/> Reply
+                        </a>
                     </Feed.Meta>
                 </Feed.Content>
             </Feed.Event>)
@@ -69,7 +92,7 @@ export default class MyFeed extends Component {
 
         return (
             <Feed>
-                { items }
+                {items}
             </Feed>
         )
     }
