@@ -7,9 +7,6 @@ import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import {EmojiSunglasses, Images} from "react-bootstrap-icons";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
-import ImageUploader from 'react-images-upload';
-import {forEach} from "react-bootstrap/cjs/ElementChildren";
-
 
 
 class MyTextArea extends React.Component {
@@ -52,7 +49,11 @@ class MyTextArea extends React.Component {
                             <Button className='file-upload'>
                                     {/*<label htmlFor="image_uploads">Choose images to upload (PNG, JPG)</label>*/}
                                     <label className="custom-file-upload">
-                                        <input type="file" onChange={(e) => this.props.handle_files(e.target.files)} multiple/>
+                                        <input type="file"
+                                               onChange={(e) => this.props.handle_files(e.target.files)}
+                                               multiple
+                                               accept="image/*, video/*"
+                                        />
                                         <Images/>
                                     </label>
                                 </Button>

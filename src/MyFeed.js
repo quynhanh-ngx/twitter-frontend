@@ -1,14 +1,12 @@
-import _ from 'lodash'
 import React, {Component} from 'react'
-import {Feed, Icon} from 'semantic-ui-react'
-import faker from "faker";
+import {Feed, Grid, Icon} from 'semantic-ui-react'
 import PropTypes from "prop-types";
-import SignupForm from "./SignupForm";
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Image from "react-bootstrap/Image";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {ChatQuote, Reply} from "react-bootstrap-icons";
+import {ChatQuote} from "react-bootstrap-icons";
+import Gallery from 'react-grid-gallery';
+
 
 // const source = _.times(100, () => ({
 //     name: faker.name.firstName() + " " + faker.name.lastName(),
@@ -18,18 +16,24 @@ import {ChatQuote, Reply} from "react-bootstrap-icons";
 //     like_count: faker.random.number({ min: 0, max: 55 })
 // }))
 
+
 export default class MyFeed extends Component {
 
     render() {
         const items = [];
-
         this.props.tweets.forEach(value => {
-            const imageElements = [];
-            value.images.forEach(imageData =>{
-                imageElements.push(
-                    <img className="tweet-image" src={imageData.image} alt="Image"/>
-                )
-            });
+            const images = [];
+            value.images.forEach(imageData => {
+                images.push({
+                    src: imageData.image,
+                    thumbnail: imageData.image,
+                    thumbnailWidth: 320,
+                    thumbnailHeight: 174,
+                    isSelected: false,
+                    caption: value.message
+                });
+            })
+
             const alertOptions = {
                 title: 'Delete tweet',
                 message: 'Y\'all sure about that?',
@@ -64,11 +68,11 @@ export default class MyFeed extends Component {
                         {value.message}
                         <br/>
                         {/*TODO: delete that br lol*/}
-                        {value.video ? <video width="auto" height="509" controls>
+                        {value.video ? <video width="auto" height="auto" controls>
                             <source src={value.video} type="video/mp4"/>
-                                    Your browser does not support the video tag.
+                            Your browser does not support the video tag.
                         </video> : null}
-                        {imageElements ? <div className='tweet-images'>{imageElements}</div> : null}
+                        {images ? <Gallery images={images} enableImageSelection={false} /> : null}
                     </Feed.Extra>
                     <Feed.Meta>
                         <Feed.Like className={value.liked ? 'liked' : ''}

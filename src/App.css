@@ -33,6 +33,10 @@
   border-right-style: none;
 }
 
+.ui.feed>.event>.content {
+  display: grid;
+}
+
 .ui.feed>.event>.content .extra,
 .ui.feed>.event>.content .summary
 {
@@ -294,7 +298,24 @@ input[type="file"] {
   background-color: transparent;
 }
 
-.tweet-image{
-  max-height: 254px;
+.image-grid {
+  width: 480px;
+  height: 480px;
+}
 
+.image-grid > .row {
+  height: 50%;
+}
+
+.tweet-image {
+  /*max-height: 254px;*/
+  /*max-width: 254px;*/
+  float: left;
+  width: 100%;
+  height:100%;
+}
+
+.extra > video {
+  max-width: 100%;
+  max-height: 50vh;
 }
