@@ -7,6 +7,7 @@ import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import {EmojiSunglasses, Images} from "react-bootstrap-icons";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import Gallery from "react-grid-gallery";
 
 
 class MyTextArea extends React.Component {
@@ -15,12 +16,6 @@ class MyTextArea extends React.Component {
         const controlId = "tweetBox.ControlTextarea1";
         const onEmojiClick = (event, emojiObject) => {
             document.getElementById(controlId).value += emojiObject.emoji;
-        }
-        const pictureElements = [];
-        for (const pictureKey in this.props.pictures) {
-            pictureElements.push(<p>{this.props.pictures[pictureKey].name}</p>);
-            console.log(this.props.pictures[pictureKey]);
-            console.log(URL.createObjectURL(this.props.pictures[pictureKey]));
         }
 
         const videoElements = [];
@@ -37,7 +32,7 @@ class MyTextArea extends React.Component {
                 <Form.Group controlId={controlId} name='tweetbox_text'>
                     {/*<Form.Label>Example textarea</Form.Label>*/}
                     <Form.Control as="textarea" rows="3" placeholder="Whassup???"/>
-                    {pictureElements}
+                    {this.props.picturePreviews ? <Gallery images={this.props.picturePreviews} enableImageSelection={false} enableLightbox={false} /> : null}
                     {videoElements}
                     <ButtonToolbar className='float-right' aria-label="Toolbar with button groups">
                         <ButtonGroup className="mr-2" aria-label="First group">

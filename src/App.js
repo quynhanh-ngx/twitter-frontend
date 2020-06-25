@@ -59,6 +59,7 @@ class App extends React.Component {
             username: '',
             tweets: [],
             pictures: [],
+            picturePreviews: [],
             videos: [],
         };
         this.onDrop = this.onDrop.bind(this);
@@ -196,7 +197,6 @@ class App extends React.Component {
 
     // Add files to state
     handle_files = (files) => {
-        console.log(files);
         const pictures = [];
         const videos = [];
         for (let i = 0; i < files.length; i++) {
@@ -209,6 +209,36 @@ class App extends React.Component {
                 alert('Unsupported file type!!!!!!!!!!')
             }
         }
+
+        /* Map each file to a promise that resolves to an array of image URI's */
+        Promise.all(pictures.map(file => {
+            return (new Promise((resolve,reject) => {
+                const reader = new FileReader();
+                reader.addEventListener('load', (ev) => {
+                    resolve(ev.target.result);
+                });
+                reader.addEventListener('error', reject);
+                reader.readAsDataURL(file);
+            }));
+        }))
+            .then(images => {
+                console.log(images);
+                const imageToImagePreview = (image) => {
+                    return {
+                        src: image,
+                        thumbnail: image,
+                        thumbnailWidth: 100,
+                        thumbnailHeight: 100,
+                        isSelected: false
+                    }
+                }
+                /* Once all promises are resolved, update state with image URI array */
+                this.setState({ picturePreviews : images.map(imageToImagePreview) })
+
+            }, error => {
+                console.error(error);
+            });
+
         this.setState({pictures: pictures, videos: videos})
     }
 
@@ -319,6 +349,7 @@ class App extends React.Component {
                                 <MyTextArea
                                     handle_tweet={this.handle_tweet}
                                     handle_files ={this.handle_files}
+                                    picturePreviews = {this.state.picturePreviews}
                                     pictures = {this.state.pictures}
                                     videos = {this.state.videos}
                                 />,
