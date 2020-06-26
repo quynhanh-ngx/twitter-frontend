@@ -10,6 +10,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Gallery from "react-grid-gallery";
 
 
+
 class MyTextArea extends React.Component {
 
     render() {
@@ -23,6 +24,8 @@ class MyTextArea extends React.Component {
             videoElements.push(<p>{this.props.videos[videoKey].name}</p>);
         }
 
+
+
         return (
             <Form id="tweetbox" onSubmit={(e) => {
                 console.log(e.target.elements);
@@ -32,7 +35,10 @@ class MyTextArea extends React.Component {
                 <Form.Group controlId={controlId} name='tweetbox_text'>
                     {/*<Form.Label>Example textarea</Form.Label>*/}
                     <Form.Control as="textarea" rows="3" placeholder="Whassup???"/>
-                    {this.props.picturePreviews ? <Gallery images={this.props.picturePreviews} enableImageSelection={false} enableLightbox={false} /> : null}
+                    {this.props.picturePreviews ? <Gallery images={this.props.picturePreviews}
+                                                           enableImageSelection={false}
+                                                           onClickThumbnail={this.props.handle_tweetbox_preview_click}
+                    /> : null}
                     {videoElements}
                     <ButtonToolbar className='float-right' aria-label="Toolbar with button groups">
                         <ButtonGroup className="mr-2" aria-label="First group">

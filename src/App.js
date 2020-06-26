@@ -60,7 +60,7 @@ class App extends React.Component {
             tweets: [],
             pictures: [],
             picturePreviews: [],
-            videos: [],
+            videos: []
         };
         this.onDrop = this.onDrop.bind(this);
     }
@@ -229,7 +229,10 @@ class App extends React.Component {
                         thumbnail: image,
                         thumbnailWidth: 100,
                         thumbnailHeight: 100,
-                        isSelected: false
+                        isSelected: false,
+                        customOverlay: <div>
+                           <button> delete </button>
+                        </div>
                     }
                 }
                 /* Once all promises are resolved, update state with image URI array */
@@ -240,7 +243,20 @@ class App extends React.Component {
             });
 
         this.setState({pictures: pictures, videos: videos})
+
     }
+
+    handle_tweetbox_preview_click = (index, event) => {
+        var pictures = this.state.pictures.slice();
+        var picturePreviews = this.state.picturePreviews.slice();
+        pictures.splice(index, 1);
+        picturePreviews.splice(index, 1);
+        this.setState({
+            pictures: pictures,
+            picturePreviews: picturePreviews
+        });
+    }
+
 
     // Allow author to post tweets
     handle_tweet = (message) => {
@@ -278,7 +294,6 @@ class App extends React.Component {
             .catch(error => console.log('error', error));
     }
 
-
     handle_delete = (tweetId) => {
         axios.delete(API_ENDPOINT + '/tweet/' + tweetId + '/',
             {
@@ -309,6 +324,7 @@ class App extends React.Component {
         });
     }
 
+
     render() {
 
         let form;
@@ -323,7 +339,7 @@ class App extends React.Component {
                 form = null;
         }
 
-        const cloudCount = 20;
+        const cloudCount = 1;
         let clouds = [];
         for (let i = 0; i < cloudCount; i++) {
             let speed = Math.floor(Math.random() * 3);
@@ -331,6 +347,7 @@ class App extends React.Component {
             let delay = Math.floor(Math.random() * 7);
             clouds.push(<Cloud speed={speed} size={size} delay={delay}/>);
         }
+
         return (
             <div className="App">
                 <MyNavbar
@@ -349,6 +366,7 @@ class App extends React.Component {
                                 <MyTextArea
                                     handle_tweet={this.handle_tweet}
                                     handle_files ={this.handle_files}
+                                    handle_tweetbox_preview_click = {this.handle_tweetbox_preview_click}
                                     picturePreviews = {this.state.picturePreviews}
                                     pictures = {this.state.pictures}
                                     videos = {this.state.videos}

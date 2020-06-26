@@ -17,6 +17,35 @@ import Gallery from 'react-grid-gallery';
 // }))
 
 
+class AlertOptionCustomUI extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { activeIndex: 0 };
+    }
+    render() {
+        return <div className='react-confirm-alert-body'>
+            {this.props.title && <h1>{this.props.title}</h1>}
+            {this.props.message}
+            <div className='react-confirm-alert-button-group'>
+                {this.props.buttons.map((button, i) => (
+                    <button key={i} onClick={() => {
+                    button.onClick();
+                    this.props.onClose();
+                }} className={button.className}>
+                    {button.label}
+                    </button>
+                    ))}
+            </div>
+        </div>;
+    }
+}
+
+AlertOptionCustomUI.propTypes = {
+    title: PropTypes.any,
+    message: PropTypes.any,
+    buttons: PropTypes.any,
+    onClick: PropTypes.func
+};
 export default class MyFeed extends Component {
 
     render() {
@@ -49,7 +78,12 @@ export default class MyFeed extends Component {
                     }
                 ],
                 childrenElement: () => <div/>,
-                // customUI: ({ onClose }) => <div>Custom UI</div>,
+                customUI: ({ title, message, buttons, onClose }) => {
+                    return (
+                        <AlertOptionCustomUI title={title} message={message}
+                                             buttons={buttons} onClose={onClose}/>
+                    );
+                },
                 closeOnEscape: true,
                 closeOnClickOutside: true,
                 // willUnmount: () => {},
@@ -72,7 +106,7 @@ export default class MyFeed extends Component {
                             <source src={value.video} type="video/mp4"/>
                             Your browser does not support the video tag.
                         </video> : null}
-                        {images ? <Gallery images={images} enableImageSelection={false} /> : null}
+                        {images ? <Gallery images={images} enableImageSelection={false} backdropClosesModal={true} /> : null}
                     </Feed.Extra>
                     <Feed.Meta>
                         <Feed.Like className={value.liked ? 'liked' : ''}
