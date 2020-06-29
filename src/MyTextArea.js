@@ -19,17 +19,16 @@ class MyTextArea extends React.Component {
             document.getElementById(controlId).value += emojiObject.emoji;
         }
 
-        const videoElements = [];
-        for (const videoKey in this.props.videos) {
-            videoElements.push(<p>{this.props.videos[videoKey].name}</p>);
-        }
+        // const videoElements = [];
+        // videoElements.push(<p>{this.props.video.name}</p>);
+        //
 
 
 
         return (
             <Form id="tweetbox" onSubmit={(e) => {
                 console.log(e.target.elements);
-                this.props.handle_tweet(e.target.elements[0].value);
+                this.props.handle_tweet(e, e.target.elements[0].value);
                 e.target.elements[0].value = "";
             }}>
                 <Form.Group controlId={controlId} name='tweetbox_text'>
@@ -37,9 +36,14 @@ class MyTextArea extends React.Component {
                     <Form.Control as="textarea" rows="3" placeholder="Whassup???"/>
                     {this.props.picturePreviews ? <Gallery images={this.props.picturePreviews}
                                                            enableImageSelection={false}
-                                                           onClickThumbnail={this.props.handle_tweetbox_preview_click}
+                                                           onClickThumbnail={this.props.handle_tweetbox_picture_preview_click}
+                                                           enableLightbox={false}
                     /> : null}
-                    {videoElements}
+                    {/*{this.props.video ? this.props.video.name : null}*/}
+                    {this.props.videoPreview ? <video className="video" width="50%" height="auto" controls>
+                        <source src={this.props.videoPreview} type = {this.props.video.type}/>
+                        Your browser does not support the video tag.
+                    </video>: null}
                     <ButtonToolbar className='float-right' aria-label="Toolbar with button groups">
                         <ButtonGroup className="mr-2" aria-label="First group">
                             <DropdownButton as={ButtonGroup} title={<EmojiSunglasses/>} id="bg-nested-dropdown">

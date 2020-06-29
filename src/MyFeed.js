@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Feed, Grid, Icon} from 'semantic-ui-react'
+import {Feed, Icon} from 'semantic-ui-react'
 import PropTypes from "prop-types";
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -91,11 +91,12 @@ export default class MyFeed extends Component {
                 // onClickOutside: () => {},
                 // onKeypressEscape: () => {}
             };
-            items.push(<Feed.Event id={'tweet-' + value.id}>
+            items.push(
+                <div className="event" key={value.id} id={'tweet-' + value.id}>
                 <Image src={value.author_picture} roundedCircle height='50px' width='50px'/>
                 <Feed.Content>
                     <Feed.Summary>
-                        <a>{value.author_name}</a> posted on their page
+                        <a href={"#user-" + value.author} >{value.author_name}</a> posted on their page
                         <Feed.Date> {value.created_at}</Feed.Date>
                     </Feed.Summary>
                     <Feed.Extra text>
@@ -114,18 +115,18 @@ export default class MyFeed extends Component {
                             <Icon name='like'/>{value.like_count} {value.like_count === 1 ? 'Like' : 'Likes'}
                         </Feed.Like>
                         {this.props.current_user === value.author ?
-                            <a className="delete" onClick={() => confirmAlert(alertOptions)}>
+                            <a href={"#delete-" + value.id} className="delete" onClick={() => confirmAlert(alertOptions)}>
                                 <i aria-hidden="true" className="delete icon"></i>Delete
                             </a> : null}
-                        <a className="comment" onClick={(this.props.handle_reply)}>
+                        <a href={"#retweet-" + value.id} className="comment" onClick={(this.props.handle_reply)}>
                             <i aria-hidden="true" className="retweet icon"></i>Retweet
                         </a>
-                        <a className="comment" onClick={(this.props.handle_reply)}>
+                        <a href={"#reply-" + value.id} className="comment" onClick={(this.props.handle_reply)}>
                             <ChatQuote/> Reply
                         </a>
                     </Feed.Meta>
                 </Feed.Content>
-            </Feed.Event>)
+            </div>)
         });
 
         return (

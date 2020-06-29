@@ -60,7 +60,8 @@ class App extends React.Component {
             tweets: [],
             pictures: [],
             picturePreviews: [],
-            videos: []
+            video: null,
+            videoPreview: null
         };
         this.onDrop = this.onDrop.bind(this);
     }
@@ -90,13 +91,14 @@ class App extends React.Component {
         }
     };
 
+    // TODO: Pagination
     getTweets = () => {
         console.log('Fetching tweets');
         axios.get(API_ENDPOINT + '/tweet', {
             headers: {
                 Authorization: `JWT ${localStorage.getItem('token')}`
             }
-        }).then(res => this.setState({tweets: res.data}));
+        }).then(res => this.setState({tweets: res.data.results}));
 
     }
 
@@ -163,11 +165,14 @@ class App extends React.Component {
                 break;
             }
         }
+
         // If found, set liked status to true
         if (likedTweetIndex !== -1){
-            this.state.tweets[likedTweetIndex].liked = true;
-            this.state.tweets[likedTweetIndex].like_count++;
-            this.setState({tweets: this.state.tweets});
+            let tweets = this.state.tweets;
+            let tweet = tweets[likedTweetIndex];
+            tweet.liked = true;
+            tweet.like_count++;
+            this.setState({tweets: tweets});
         }
     }
 
@@ -189,26 +194,42 @@ class App extends React.Component {
         }
         // If found, set liked status to true
         if (likedTweetIndex !== -1){
-            this.state.tweets[likedTweetIndex].liked = false;
-            this.state.tweets[likedTweetIndex].like_count--;
-            this.setState({tweets: this.state.tweets});
+            let tweets = this.state.tweets;
+            let tweet = tweets[likedTweetIndex];
+            tweet.liked = false;
+            tweet.like_count--;
+            this.setState({tweets: tweets});
         }
     }
 
     // Add files to state
     handle_files = (files) => {
+        const ALLOWED_VIDEO_TYPES = ['video/mp4'];
         const pictures = [];
-        const videos = [];
+        const errors = [];
+        let video = null;
+        let displayedAlertMessage = false;
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
             if (file.type.startsWith('image')){
                 pictures.push(file);
-            } else if(file.type.startsWith('video') ){
-                videos.push(file);
-            } else{
-                alert('Unsupported file type!!!!!!!!!!')
+            } else if(file.type.startsWith('video') ) {
+                if(!ALLOWED_VIDEO_TYPES.includes(file.type)) {
+                    errors.push(`Video type "${file.type}" is unsupported`);
+                    continue
+                }
+                if (video != null && !displayedAlertMessage) {
+                    errors.push("Only ONE video is allowed");
+                    displayedAlertMessage = true;
+                }
+                video = file;
+            } else {
+                errors.push('Unsupported file type!!!!!!!!!!')
             }
         }
+        if (errors.length !== 0) alert(errors.join(' \n '));
+
+
 
         /* Map each file to a promise that resolves to an array of image URI's */
         Promise.all(pictures.map(file => {
@@ -236,17 +257,17 @@ class App extends React.Component {
                     }
                 }
                 /* Once all promises are resolved, update state with image URI array */
-                this.setState({ picturePreviews : images.map(imageToImagePreview) })
+                this.setState({picturePreviews: images.map(imageToImagePreview)})
 
-            }, error => {
+            }
+            , error => {
                 console.error(error);
-            });
-
-        this.setState({pictures: pictures, videos: videos})
+            })
+        this.setState({pictures: pictures, video: video, videoPreview: video ? window.URL.createObjectURL(video): null});
 
     }
 
-    handle_tweetbox_preview_click = (index, event) => {
+    handle_tweetbox_picture_preview_click = (index, event) => {
         var pictures = this.state.pictures.slice();
         var picturePreviews = this.state.picturePreviews.slice();
         pictures.splice(index, 1);
@@ -259,13 +280,14 @@ class App extends React.Component {
 
 
     // Allow author to post tweets
-    handle_tweet = (message) => {
-        const video = this.state.videos.length === 0 ? null : this.state.videos[0];
+    handle_tweet = (e, message) => {
+        e.preventDefault();
+        const video = this.state.video;
         const images = this.state.pictures;
         var myHeaders = new Headers();
         myHeaders.append("Connection", "keep-alive");
         myHeaders.append("Accept-Language", "en-US,en;q=0.9");
-        myHeaders.append("Authorization", "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InF1YW5oIiwiZXhwIjoxNTkzNTM3NjQ1LCJlbWFpbCI6IiJ9.RzHjV30lsKB_a2EdqAvafWjqHklmYi5JYoY8O0WpRMs");
+        myHeaders.append("Authorization", `JWT ${localStorage.getItem('token')}`);
 
 
         var formData = new FormData();
@@ -287,10 +309,9 @@ class App extends React.Component {
 
         fetch(API_ENDPOINT + "/tweet/", requestOptions)
             .then(response => response.text())
-            // TODO : Remove later
-            .then(result => console.log(result))
             .then(() => this.resetState())
-            .then(() => this.setState({videos: [], pictures: []}))
+            .then(() => {window.URL.revokeObjectURL(this.state.videoPreview)})
+            .then(() => this.setState({video: null, pictures: [], videoPreview: null, picturePreviews: []}))
             .catch(error => console.log('error', error));
     }
 
@@ -345,7 +366,7 @@ class App extends React.Component {
             let speed = Math.floor(Math.random() * 3);
             let size = Math.floor(Math.random() * 3);
             let delay = Math.floor(Math.random() * 7);
-            clouds.push(<Cloud speed={speed} size={size} delay={delay}/>);
+            clouds.push(<Cloud speed={speed} key={i} size={size} delay={delay}/>);
         }
 
         return (
@@ -366,12 +387,14 @@ class App extends React.Component {
                                 <MyTextArea
                                     handle_tweet={this.handle_tweet}
                                     handle_files ={this.handle_files}
-                                    handle_tweetbox_preview_click = {this.handle_tweetbox_preview_click}
+                                    handle_tweetbox_picture_preview_click = {this.handle_tweetbox_picture_preview_click}
                                     picturePreviews = {this.state.picturePreviews}
                                     pictures = {this.state.pictures}
-                                    videos = {this.state.videos}
+                                    video = {this.state.video}
+                                    videoPreview = {this.state.videoPreview}
+                                    key = {1}
                                 />,
-                                <div className="sticky-top clouds">{clouds}</div>,
+                                <div className="sticky-top clouds" key = {2}>{clouds}</div>,
                                 <MyFeed
                                     tweets={this.state.tweets}
                                     handle_like = {this.handle_like}
@@ -379,6 +402,7 @@ class App extends React.Component {
                                     handle_delete = {this.handle_delete}
                                     current_user = {this.state.username}
                                     handle_reply = {this.handle_reply}
+                                    key = {3}
                                 />
                             ] : null}
 
