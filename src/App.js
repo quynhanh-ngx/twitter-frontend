@@ -276,7 +276,6 @@ class App extends React.Component {
                                     handle_dislike = {this.handle_dislike}
                                     handle_delete = {this.handle_delete}
                                     current_user = {this.state.username}
-                                    // handle_reply = {this.handle_reply}
                                     getTweets = {this.getTweets}
                                     key = {3}
                                 />

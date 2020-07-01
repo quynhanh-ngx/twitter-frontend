@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Header, Image, Modal } from 'semantic-ui-react'
 import {ChatQuote} from "react-bootstrap-icons";
 import MyTextArea from "./MyTextArea";
+import {MyTweet} from "./MyTweet";
 
 class ReplyModal extends React.Component {
     state = { modalOpen: false }
@@ -17,9 +18,21 @@ class ReplyModal extends React.Component {
                    onClose={this.handleClose}
                    centered={false}
             >
-                <Modal.Header>Select a Photo</Modal.Header>
+                <Modal.Header>Reply</Modal.Header>
                 <Modal.Content image>
-                    <MyTextArea replyingTo={this.props.replyingTo} getTweets = {this.props.getTweets} onTweetSubmit={this.handleClose} />
+                    <MyTweet tweetData={this.props.replyingTo}
+                             handle_like = {this.props.handle_like}
+                             handle_dislike = {this.props.handle_dislike}
+                             handle_delete = {this.props.handle_delete}
+                             current_user = {this.props.current_user}
+                             excludeReplyButton = {true}
+                    />
+                    {/* TODO : Remove "br" thing later */}
+                    <br/>
+                    <MyTextArea
+                        replyingTo={this.props.replyingTo}
+                        getTweets = {this.props.getTweets}
+                        onTweetSubmit={this.handleClose} />
                     {/*<Image wrapped size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png'/>*/}
                     {/*<Modal.Description>*/}
                     {/*    <Header>Default Profile Image</Header>*/}
