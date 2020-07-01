@@ -6,6 +6,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import Image from "react-bootstrap/Image";
 import {ChatQuote} from "react-bootstrap-icons";
 import Gallery from 'react-grid-gallery';
+import ReplyModal from "./ReplyModal";
 
 
 // const source = _.times(100, () => ({
@@ -100,6 +101,7 @@ export default class MyFeed extends Component {
                         <Feed.Date> {value.created_at}</Feed.Date>
                     </Feed.Summary>
                     <Feed.Extra text>
+                        {value.replying_to ? <p>Replying to @{value.replying_to}</p> : null}
                         {value.message}
                         <br/>
                         {/*TODO: delete that br lol*/}
@@ -121,9 +123,7 @@ export default class MyFeed extends Component {
                         <a href={"#retweet-" + value.id} className="comment" onClick={(this.props.handle_reply)}>
                             <i aria-hidden="true" className="retweet icon"></i>Retweet
                         </a>
-                        <a href={"#reply-" + value.id} className="comment" onClick={(this.props.handle_reply)}>
-                            <ChatQuote/> Reply
-                        </a>
+                       <ReplyModal replyingTo={value} getTweets = {this.props.getTweets}/>
                     </Feed.Meta>
                 </Feed.Content>
             </div>)

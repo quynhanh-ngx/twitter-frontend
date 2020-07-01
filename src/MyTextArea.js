@@ -8,6 +8,7 @@ import {EmojiSunglasses, Images} from "react-bootstrap-icons";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Gallery from "react-grid-gallery";
+import {MyAlert} from "./MyAlert";
 
 
 // TODO: Move the setting 
@@ -22,7 +23,8 @@ class MyTextArea extends React.Component {
             pictures: [],
             picturePreviews: [],
             video: null,
-            videoPreview: null
+            videoPreview: null,
+            errorMessage: null
         }
         this.onDrop = this.onDrop.bind(this);
     }
@@ -36,9 +38,12 @@ class MyTextArea extends React.Component {
 
     // Add files to state
     handle_files = (files) => {
+        if (files.length === 0)
+            return;
+
         const ALLOWED_VIDEO_TYPES = ['video/mp4'];
         const pictures = [];
-        const errors = [];
+        let errorMessage = null;
         let video = null;
         let displayedAlertMessage = false;
         for (let i = 0; i < files.length; i++) {
@@ -47,20 +52,18 @@ class MyTextArea extends React.Component {
                 pictures.push(file);
             } else if(file.type.startsWith('video') ) {
                 if(!ALLOWED_VIDEO_TYPES.includes(file.type)) {
-                    errors.push(`Video type "${file.type}" is unsupported`);
+                    errorMessage = `Video type "${file.type}" is unsupported`;
                     continue
                 }
                 if (video != null && !displayedAlertMessage) {
-                    errors.push("Only ONE video is allowed");
+                    errorMessage ="Only ONE video is allowed";
                     displayedAlertMessage = true;
                 }
                 video = file;
             } else {
-                errors.push('Unsupported file type!!!!!!!!!!')
+                errorMessage='Unsupported file type!!!!!!!!!!';
             }
         }
-        if (errors.length !== 0) alert(errors.join(' \n '));
-
 
 
         /* Map each file to a promise that resolves to an array of image URI's */
@@ -95,7 +98,8 @@ class MyTextArea extends React.Component {
                 , error => {
                     console.error(error);
                 })
-        this.setState({pictures: pictures, video: video, videoPreview: video ? window.URL.createObjectURL(video): null});
+
+        this.setState({errorMessage: errorMessage, pictures: pictures, video: video, videoPreview: video ? window.URL.createObjectURL(video): null});
 
     }
 
@@ -123,6 +127,9 @@ class MyTextArea extends React.Component {
 
 
         var formData = new FormData();
+        if(this.props.replyingTo){
+            formData.append("replying_to", this.props.replyingTo.id);
+        }
         formData.append("message", message);
         if (video != null) {
             // console.log("video is not null")
@@ -143,7 +150,6 @@ class MyTextArea extends React.Component {
             .then(response => response.text())
             .then(() => {window.URL.revokeObjectURL(this.state.videoPreview)})
             .then(() => this.setState({video: null, pictures: [], videoPreview: null, picturePreviews: []}))
-            // TODO refresh tweets (maybe call function provided by parent?)
             .then(this.props.getTweets)
             .catch(error => console.log('error', error));
     }
@@ -156,10 +162,13 @@ class MyTextArea extends React.Component {
 
        
         return (
+            <div>
+                {this.state.errorMessage ? <MyAlert message={this.state.errorMessage}/> : null}
+                {this.props.replyingTo ? <p>Replying to @{this.props.replyingTo.author}</p> : null}
             <Form id="tweetbox" onSubmit={(e) => {
-                console.log(e.target.elements);
                 this.handle_tweet(e, e.target.elements[0].value);
                 e.target.elements[0].value = "";
+                if (this.props.onTweetSubmit) this.props.onTweetSubmit();
             }}>
                 <Form.Group controlId={controlId} name='tweetbox_text'>
                     {/*<Form.Label>Example textarea</Form.Label>*/}
@@ -202,6 +211,7 @@ class MyTextArea extends React.Component {
                     </ButtonToolbar>
                 </Form.Group>
             </Form>
+            </div>
         );
     }
 }

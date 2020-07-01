@@ -198,19 +198,19 @@ a {
   height: 80px;
 }
 
-.slow{
+.cloud.slow{
   -o-animation: float 45s infinite linear;
   -moz-animation: float 45s infinite linear;
   -webkit-animation: float 45s infinite linear;
   animation: float 45s infinite linear;
 }
-.medium{
+.cloud.medium{
   -o-animation: float 35s infinite linear;
   -moz-animation: float 35s infinite linear;
   -webkit-animation: float 35s infinite linear;
   animation: float 35s infinite linear;
 }
-.fast{
+.cloud.fast{
   -o-animation: float 25s infinite linear;
   -moz-animation: float 25s infinite linear;
   -webkit-animation: float 25s infinite linear;
@@ -324,3 +324,9 @@ input[type="file"] {
   float: left;
 }
 
+.modals.dimmer[class*="top aligned"] .modal{
+  margin: 10vh auto !important;
+  /*background: transparent;*/
+  position: initial;
+  height: auto;
+}

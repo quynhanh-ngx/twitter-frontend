@@ -209,14 +209,14 @@ class App extends React.Component {
             }).then(() => this.resetState())
     }
 
-    handle_reply = (tweetId) => {
-        axios.get(API_ENDPOINT + '/tweet/',
-            {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`
-                }
-            }).then(() => this.resetState())
-    }
+    // handle_reply = (tweetId) => {
+    //     axios.get(API_ENDPOINT + '/tweet/',
+    //         {
+    //             headers: {
+    //                 Authorization: `JWT ${localStorage.getItem('token')}`
+    //             }
+    //         }).then(() => this.resetState())
+    // }
 
     display_form = form => {
         this.setState({
@@ -276,7 +276,8 @@ class App extends React.Component {
                                     handle_dislike = {this.handle_dislike}
                                     handle_delete = {this.handle_delete}
                                     current_user = {this.state.username}
-                                    handle_reply = {this.handle_reply}
+                                    // handle_reply = {this.handle_reply}
+                                    getTweets = {this.getTweets}
                                     key = {3}
                                 />
                             ] : null}
