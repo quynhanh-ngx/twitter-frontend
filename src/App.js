@@ -209,14 +209,6 @@ class App extends React.Component {
             }).then(() => this.resetState())
     }
 
-    // handle_reply = (tweetId) => {
-    //     axios.get(API_ENDPOINT + '/tweet/',
-    //         {
-    //             headers: {
-    //                 Authorization: `JWT ${localStorage.getItem('token')}`
-    //             }
-    //         }).then(() => this.resetState())
-    // }
 
     display_form = form => {
         this.setState({
@@ -224,7 +216,49 @@ class App extends React.Component {
         });
     };
 
+    handle_retweet = (tweetId) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Connection", "keep-alive");
+        myHeaders.append("Accept-Language", "en-US,en;q=0.9");
+        myHeaders.append("Authorization", `JWT ${localStorage.getItem('token')}`);
 
+
+        var formData = new FormData();
+        formData.append("replying_to", tweetId);
+        formData.append("is_retweet", true);
+
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow'
+        };
+
+        fetch(API_ENDPOINT + "/tweet/", requestOptions)
+            .then(response => response.text())
+            .then(this.getTweets)
+            .catch(error => console.log('error', error));
+
+        // let likedTweetIndex = -1;
+        // // Search for Tweet being liked
+        // for (let i = 0; i < this.state.tweets.length; i++) {
+        //     let tweet = this.state.tweets[i];
+        //     if(tweetId===tweet.id){
+        //         likedTweetIndex = i;
+        //         break;
+        //     }
+        // }
+        //
+        // // If found, set liked status to true
+        // if (likedTweetIndex !== -1){
+        //     let tweets = this.state.tweets;
+        //     let tweet = tweets[likedTweetIndex];
+        //     tweet.liked = true;
+        //     tweet.like_count++;
+        //     this.setState({tweets: tweets});
+        // }
+    }
 
 
     render() {
@@ -275,6 +309,7 @@ class App extends React.Component {
                                     handle_like = {this.handle_like}
                                     handle_dislike = {this.handle_dislike}
                                     handle_delete = {this.handle_delete}
+                                    handle_retweet = {this.handle_retweet}
                                     current_user = {this.state.username}
                                     getTweets = {this.getTweets}
                                     key = {3}

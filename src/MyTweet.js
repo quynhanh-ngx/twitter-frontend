@@ -1,5 +1,5 @@
 import Image from "react-bootstrap/Image";
-import {Feed, Icon} from "semantic-ui-react";
+import {Dropdown, Feed, Icon, Menu} from "semantic-ui-react";
 import Gallery from "react-grid-gallery";
 import {confirmAlert} from "react-confirm-alert";
 import ReplyModal from "./ReplyModal";
@@ -35,6 +35,7 @@ AlertOptionCustomUI.propTypes = {
     buttons: PropTypes.any,
     onClick: PropTypes.func
 };
+
 
 export class MyTweet extends React.Component {
     render() {
@@ -75,6 +76,19 @@ export class MyTweet extends React.Component {
             closeOnClickOutside: true,
 
         };
+
+        const options = [
+            { key: 1, text: 'Retweet', value: 1, onClick: () =>
+                    (this.props.handle_retweet(this.props.tweetData.id)) },
+            { key: 2, text: this.props.excludeReplyButton ? null : <ReplyModal
+                        handle_like = {this.props.handle_like}
+                        handle_dislike = {this.props.handle_dislike}
+                        handle_delete = {this.props.handle_delete}
+                        replyingTo={this.props.tweetData}
+                        isRetweet = {true}
+                        getTweets={this.props.getTweets}/>
+                , value: 2 },
+        ]
         return <div className="event" key={this.props.tweetData.id} id={'tweet-' + this.props.tweetData.id}>
             <Image src={this.props.tweetData.author_picture} roundedCircle height='50px' width='50px'/>
             <Feed.Content>
@@ -103,8 +117,12 @@ export class MyTweet extends React.Component {
                         <a href={"#delete-" + this.props.tweetData.id} className="delete" onClick={() => confirmAlert(alertOptions)}>
                             <i aria-hidden="true" className="delete icon"></i>Delete
                         </a> : null}
-                    {this.props.handle_retweet ? <a href={"#retweet-" + this.props.tweetData.id} className="comment" onClick={(this.props.handle_retweet)}>
-                        <i aria-hidden="true" className="retweet icon"></i>Retweet
+                    {this.props.handle_retweet ? <a href={"#retweet-" + this.props.tweetData.id} className="comment"
+                                                    onClick={() =>
+                                                        (this.props.handle_retweet(this.props.tweetData.id))}>
+                    <Menu compact>
+                        <Dropdown inline trigger={ <span><i aria-hidden="true" className="retweet icon"></i> Retweet</span>} options={options}/>
+                    </Menu>
                     </a> : null}
                     {this.props.excludeReplyButton ? null : <ReplyModal
                         handle_like = {this.props.handle_like}

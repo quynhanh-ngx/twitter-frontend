@@ -330,3 +330,11 @@ input[type="file"] {
   position: initial;
   height: auto;
 }
+
+.ui.menu{
+  background: none;
+  min-height: inherit;
+  border: none;
+  font-size: inherit;
+  box-shadow: none;
+}

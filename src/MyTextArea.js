@@ -130,6 +130,9 @@ class MyTextArea extends React.Component {
         if(this.props.replyingTo){
             formData.append("replying_to", this.props.replyingTo.id);
         }
+        if(this.props.isRetweet){
+            formData.append("is_retweet", true)
+        }
         formData.append("message", message);
         if (video != null) {
             // console.log("video is not null")
