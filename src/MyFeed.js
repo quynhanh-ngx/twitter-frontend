@@ -30,6 +30,7 @@ export default class MyFeed extends Component {
                                 handle_dislike = {this.props.handle_dislike}
                                 handle_delete = {this.props.handle_delete}
                                 handle_retweet = {this.props.handle_retweet}
+                                handle_undo_retweet = {this.props.handle_undo_retweet}
                                 current_user = {this.props.current_user}
                                 getTweets = {this.props.getTweets}
             />)

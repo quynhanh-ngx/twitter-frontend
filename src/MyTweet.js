@@ -76,10 +76,11 @@ export class MyTweet extends React.Component {
             closeOnClickOutside: true,
 
         };
-
+                    //  (this.props.handle_retweet(this.props.tweetData.id))
         const options = [
-            { key: 1, text: 'Retweet', value: 1, onClick: () =>
-                    (this.props.handle_retweet(this.props.tweetData.id)) },
+            { key: 1, text: this.props.tweetData.retweet_id ? 'Undo retweet' : 'Retweet', value: 1, onClick: () =>
+                    (this.props.tweetData.retweet_id ? this.props.handle_delete(this.props.tweetData.retweet_id) : this.props.handle_retweet(this.props.tweetData.id))
+            },
             { key: 2, text: this.props.excludeReplyButton ? null : <ReplyModal
                         handle_like = {this.props.handle_like}
                         handle_dislike = {this.props.handle_dislike}
@@ -89,6 +90,8 @@ export class MyTweet extends React.Component {
                         getTweets={this.props.getTweets}/>
                 , value: 2 },
         ]
+
+
         return <div className="event" key={this.props.tweetData.id} id={'tweet-' + this.props.tweetData.id}>
             <Image src={this.props.tweetData.author_picture} roundedCircle height='50px' width='50px'/>
             <Feed.Content>
@@ -98,7 +101,12 @@ export class MyTweet extends React.Component {
                 </Feed.Summary>
                 <Feed.Extra text>
                     {this.props.tweetData.replying_to ?
-                        <p>Replying to @{this.props.tweetData.replying_to}</p> : null}
+                        this.props.tweetData.is_retweet ?
+                            // is retweet
+                            <p>Retweeting @{this.props.tweetData.replying_to}</p> :
+                            // is reply
+                            <p>Replying to @{this.props.tweetData.replying_to}</p>
+                        : null}
                     {this.props.tweetData.message}
                     <br/>
                     {/*TODO: delete that br lol*/}
@@ -117,9 +125,7 @@ export class MyTweet extends React.Component {
                         <a href={"#delete-" + this.props.tweetData.id} className="delete" onClick={() => confirmAlert(alertOptions)}>
                             <i aria-hidden="true" className="delete icon"></i>Delete
                         </a> : null}
-                    {this.props.handle_retweet ? <a href={"#retweet-" + this.props.tweetData.id} className="comment"
-                                                    onClick={() =>
-                                                        (this.props.handle_retweet(this.props.tweetData.id))}>
+                    {this.props.handle_retweet ? <a href={"#retweet-" + this.props.tweetData.id} className={"comment" + (this.props.tweetData.retweet_id ? ' retweeted' : '')}>
                     <Menu compact>
                         <Dropdown inline trigger={ <span><i aria-hidden="true" className="retweet icon"></i> Retweet</span>} options={options}/>
                     </Menu>

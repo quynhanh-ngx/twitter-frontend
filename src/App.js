@@ -240,24 +240,23 @@ class App extends React.Component {
             .then(this.getTweets)
             .catch(error => console.log('error', error));
 
-        // let likedTweetIndex = -1;
-        // // Search for Tweet being liked
-        // for (let i = 0; i < this.state.tweets.length; i++) {
-        //     let tweet = this.state.tweets[i];
-        //     if(tweetId===tweet.id){
-        //         likedTweetIndex = i;
-        //         break;
-        //     }
-        // }
-        //
-        // // If found, set liked status to true
-        // if (likedTweetIndex !== -1){
-        //     let tweets = this.state.tweets;
-        //     let tweet = tweets[likedTweetIndex];
-        //     tweet.liked = true;
-        //     tweet.like_count++;
-        //     this.setState({tweets: tweets});
-        // }
+        let retweetedTweetIndex = -1;
+        // Search for Tweet being retweeted
+        for (let i = 0; i < this.state.tweets.length; i++) {
+            let tweet = this.state.tweets[i];
+            if(tweetId===tweet.id){
+                retweetedTweetIndex = i;
+                break;
+            }
+        }
+
+        // If found, set retweeted status to true
+        if (retweetedTweetIndex !== -1){
+            let tweets = this.state.tweets;
+            let tweet = tweets[retweetedTweetIndex];
+            tweet.retweeted = true;
+            this.setState({tweets: tweets});
+        }
     }
 
 
